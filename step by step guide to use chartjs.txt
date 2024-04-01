@@ -1,0 +1,357 @@
+***Note if we don't know what to import for the charts just go the examples of various types of bars and graphs in the chartjs
+ and copy the imports from there and then adjust the code accordingly***
+
+
+npm create vite@latest
+cd to the app - then ->
+npm i 
+npm run dev 
+
+
+------------------------------
+
+Now after setting up the basic react vite app we install our chart js and react chart js
+->npm i chart.js react-chartjs-2
+
+
+
+now create components folder in our src folder -> and inside it create -> Line.js , Bar.js , Pie.js -> and do rafce in it 
+and then start by rendering firstly the line component in our app 
+
+-> now we start making our line graph 
+
+-> in our line.jsx file -> 
+first thing we import is the kind of graph we want to have which comes from the react implementation of chartjs -> react-chartjs-2
+i.e-> import {} from "react-chartjs-2"
+
+now we can specify what component we want to display and then we grab the ui component referring to that type of graph by just
+putting it as ->import {Line} from "react-chartjs-2"
+ 
+-> now we import all the individual parts of the graph that we might need from the chart js library
+i.e->import {
+Chart as ChartJS,
+CategoryScale,
+LinearScale,
+PointElement,
+LineElement,
+Title,
+Tooltip,
+Legend,
+} from "chart.js"
+
+-> Now we need to register the components and stuff we imported from the chartjs library above with our charts-> 
+i.e->
+//without doing this nothing will be displayed in our website 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,       
+)
+
+Now we did all of the setup i.e  we imported everything we needed and then we registered all of it , letting ChartJS know we are going 
+to render those 
+
+                     ------> NOW ITS TIME TO DISPLAY THESE COMPONENTS IN OUR WEBSITE <------
+
+* The easiest way to do the rendering is -> to use <Line/> component which will be taking two different ARGUMENTS 
+like every other graphs and charts we can have -> i.e -> options and data
+<Line options={} data={} />
+
+
+*now outside the resturn statement we make objects for options and data we make objects for options and data and we will then 
+use these names of the objects inside the actual and their respective options and data fields of our line component 
+    const options = { }
+    const data = { }
+
+example
+(<Line options={options} data={data}/>)    
+
+
+*now for the data object we need to convert the data that we may have in a format that is understandable for chartjs , 
+so they have a very specific format that we need to use or organize the data
+
+---------> to demonstrate this we use the fake data we have in our file dakedata.js -> 
+i.e->
+export const lineChartData = {
+  labels: [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ],
+  datasets: [
+    {
+      label: "Steps By Aditya",
+      data: [3000, 5000, 4500, 6000, 8000, 7000, 9000],
+      borderColor: "blue",
+    },
+  ],
+};
+
+
+[NOTE on y axis we put the amount of steps we took per day in a week , i.e our y axis will going to be our data inside our datasets 
+and our x axis will be each day of the week ]
+
+*and this is the format the data to be used in our chartjs has to be present for the chart js to make sense of it -> i.e ->
+an object containg two things labels and datasets 
+
+** datasets is a list , but for each LINE THAT WE ARE GOING TO PUT IN OUR GRAPH WE HAVE TO DEFINE IT THIS WAY ->
+1st the label of what it is 
+2nd the data -> a list containing the Y axis values which should be in respective of EACH OF THE LABELS**
+
+*now we come back to our line.jsx component and we remove the data object we created and instead of it we directly import this 
+fake data object and use it as our actual data 
+**and it should show a line graph now**
+
+
+
+======================================================================================================================================
+
+Line.jsx component code till now -> 
+import React from 'react'
+
+import {Line} from "react-chartjs-2"
+
+import {
+Chart as ChartJS,
+CategoryScale,
+LinearScale,
+PointElement,
+LineElement,
+Title,
+Tooltip,
+Legend,
+} from "chart.js"
+import { lineChartData } from '../FAKE_DATA.JS'
+
+
+// now we register the above components we imported from chart.js with our ChartJs , without doing this nothing will be 
+// displayed in our website 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,       
+)
+
+const LineGraph = () => {
+
+    //we make objects for options and data and we will then use these names of the objects inside the actual and their respective 
+    // options and data fields of our line component 
+    const options = { }
+
+
+  return (
+    <div>
+
+<Line options={options} data={lineChartData} />
+
+    </div>
+  )
+}
+
+export default LineGraph
+
+======================================================================================================================================
+
+we can also add multiple datasets and use different labels for them and this will render the other persons data onto the same graph as 
+well -> 
+i.e example -> in our fakedata.js file 
+->>
+datasets: [
+    {
+      label: "Steps By Aditya",
+      data: [3000, 5000, 4500, 6000, 8000, 7000, 9000],
+      borderColor: "blue",
+    },
+    {
+        label: "Steps By Gagan",
+        data: [2000, 3000, 2500, 5000, 4000, 7200, 8000],
+        borderColor: "red",
+    },
+  ],
+
+  now we will be seeing two line graphs here one for aditya in blue and one for gagan in red 
+
+******************************************This is how we integrate line graph using chartjs********************************************
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+IN case of bar charts using charts.js library everything has to be done the same way just by changing some basic things
+
+and the data for our bargraph should also like similar to above -> 
+export const barChartData = {
+  labels:[ "Rent","Groceries","Utilities","Entertainment","Transportation" ],
+  datasets: [
+    {
+      label:"Expenses",
+      data:[1200, 300, 150, 180, 100],
+      backgroundColor: ["rgba(255,99,132,0.2)"],
+      borderColor: ["rgba(54,162,235,1)"],
+      borderWidth: 1,
+    },
+  ],
+};
+ 
+[NOTE we can also add in specific colors to each and every bar in case of chartjs's bar graph 
+example:->
+export const barChartData = {
+  labels:[ "Rent","Groceries","Utilities","Entertainment","Transportation" ],
+  datasets: [
+    {
+      label:"Expenses",
+      data:[1200, 300, 150, 180, 100],
+      backgroundColor: [
+        "rgba(255,99,132,0.2)",
+        "rgba(54,162,235,0.2)",
+        "rgba(255,206,86,0.2)",
+        "rgba(75,192,192,0.2)",
+        "rgba(153,102,255,0.2)",
+      ],
+      borderColor: [
+        "rgba(255,99,132,1)",
+        "rgba(54,162,235,1)",
+        "rgba(255,206,86,1)",
+        "rgba(75,192,192,1)",
+        "rgba(153,102,235,1)",
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
+]
+
+--------------------------------------------------
+Bargraph.jsx entire code -> 
+
+import React from 'react'
+
+import {Bar} from "react-chartjs-2"
+
+import {
+Chart as ChartJS,
+CategoryScale,
+LinearScale,
+BarElement,
+Title,
+Tooltip,
+Legend,
+} from "chart.js"
+import { barChartData } from '../FAKE_DATA.JS'
+
+
+// now we register the above components we imported from chart.js with our ChartJs , without doing this nothing will be 
+// displayed in our website 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,       
+)
+
+const BarGraph = () => {
+
+  //we make objects for options and data and we will then use these names of the objects inside the actual and their respective 
+    // options and data fields of our line component 
+    const options = { }
+
+  return (
+    <div>
+    
+{/* we here now use the bar component and require two arguments in it that are options and data */}
+<Bar options={options} data={barChartData}/>
+
+    </div>
+  )
+}
+
+export default BarGraph
+
+--------------------------------------------------
+
+
+
+
+******************************************This is how we integrate bar graph using chartjs********************************************
+---------------------------------------------------------------------------------------------------------------------------------------
+
+IN case of pie charts using charts.js library everything has to be done the same way just by changing some basic things
+
+and the data for our piegraph should also like similar to above -> 
+export const pieChartData = {
+  labels:["Facebook","Instagram","Twitter","Youtube","LinkedIn"],
+  datasets:[
+    {
+      label:"Time Spent",
+      data:[120,60,30,90,45],
+      backgroundColor: [
+        "rgba(255,99,132,0.9)",
+        "rgba(54,162,235,0.9)",
+        "rgba(255,206,86,0.9)",
+        "rgba(75,192,192,0.9)",
+        "rgba(153,102,255,0.9)",
+      ],
+      hoverOffset: 4,
+    },
+  ],
+};
+
+[note in case of pie charts we need to use different colors for us being able to differentiate the data else the whole circle will be 
+of one color ]
+
+piegraph.jsx entire code -> 
+import React from 'react'
+
+import {Pie} from "react-chartjs-2"
+
+import {
+Chart as ChartJS,
+ArcElement,
+Tooltip,
+Legend,
+} from "chart.js"
+import { pieChartData } from '../FAKE_DATA.JS'
+
+
+// now we register the above components we imported from chart.js with our ChartJs , without doing this nothing will be 
+// displayed in our website 
+ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend,       
+)
+
+
+const PieGraph = () => {
+
+ //we make objects for options and data and we will then use these names of the objects inside the actual and their respective 
+    // options and data fields of our line component 
+    const options = { }
+
+  return (
+    <div>
+
+    <Pie options={options} data={pieChartData}/>
+    
+    </div>
+  )
+}
+
+export default PieGraph
+
+
+
+******************************************This is how we integrate pie chart using chartjs********************************************
+---------------------------------------------------------------------------------------------------------------------------------------
